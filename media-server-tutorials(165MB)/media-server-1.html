@@ -1,0 +1,350 @@
+<!-- media-server-1.html
+<!-- originated: 10-21-2021 / Coach
+<!-- =============================================================================================
+<!-- Note: This web page and its associated media contents are for educational purpose only
+<!--		media contents may be copyrighted by various artists
+<!-- =============================================================================================
+
+<!-- Objective:
+<!-- ==========
+<!-- * Demonstrate serving music using HTML5 & Javascript
+<!-- =============================================================================================
+
+<!-- Functional Requiremetns :
+<!-- =======================
+<!-- 1. (Given) Display Date & Time
+
+<!-- 2. Respond to user commands:
+
+<!-- 2.0 (Given) Main Image: Silence music, visual feedback: white sand beach
+<!--				the main image also reflects user selection
+
+<!-- 2.1 (given/sample) Image 1: Coffee
+<!-- 2.2 (to be added by you) Image 2: Tea
+
+<!-- ============================================================================================= -->
+
+<html>
+
+<head>
+	<title>media-server-1/ Coach / 2-21-2021</title>
+
+	<style type="text/css">
+		body{
+			color:white;
+			background-color:black;
+			background : black ;
+		}
+	</style>
+</head>
+
+<body>
+
+<div id="content">
+
+<TABLE>
+
+	<FORM name="theForm">
+
+	<p style="text-align: center">
+		<input type="text" style="color:white;background-color:black; text-align: center;font-size:32px; font-weight:bold; font-family:Times New Roman;"name="txtDate" size="20" >
+		<input type="text" style="color:white;background-color:black;  text-align: center;font-size:32px; font-weight:bold; font-family:Times New Roman;"name="txtTime" size="20">
+
+	</p>
+
+	<p style="text-align: center">
+	<img src="images/sunrise_beach_1280x720.jpg" width="55%" NAME="image_Main" onClick="stopMusic();">
+	</p>
+
+<p style="text-align:center">
+		<input type="text" style="color:white; background-color:black; text-align: center;
+			font-size:28px; font-weight:bold;  font-family:Times New Roman;" name="txt_tuneID" size="42" >
+
+		<input type="text" style= "color:gold;background-color:black;  text-align: center;
+			font-size:28px; font-weight:bold; font-family:Times New Roman;"name="txtElapse" size="6" >
+</p>
+
+<p style="text-align: center">
+<!----------------------------------------------------------------------------------------------------- -->
+<!-- step 1: add image_tea -->
+		<img src="images/tea_classic_1280x720.jpg"  width="12%" NAME="image_tea" onClick="playTea();" >
+<!---------------------------------------------------------------------------------------------------------- -->
+       <img src="images/grand-canyon-sunset-0127pm-1024x576.jpg"  width="12%" NAME="image_tea" onClick=" playGrandcanyon();" >
+		<img src="images/coffee_cup_1_1280x720.jpg"  width="12%" NAME="image1" onClick="playMusic1();" >
+
+		<img src="images/Capture-2020-10-28-viva-16x9.PNG" width="12%" NAME="image_bonus_viva"  onClick="play_bonus_viva();">
+
+	</p>
+
+
+
+	</FORM>
+
+</TABLE>
+
+</div>
+<audio id="heineken">
+	<source src="sounds/open-heineken.mp3">
+</audio>
+<audio id="cuckoo">
+	<source src="sounds/cuckoo.mp3">
+</audio>
+
+<!-- ============================================================================================== -->
+<audio id="music01" preload="none">
+	<source src="music/AugustMoon_412.mp3"
+</audio>
+
+<! ---------------------------------------------------- -->
+<!-- step 2: add audio id for your mp3 selection -->
+<audio id="musicTea" preload="none">
+	<source src="music/Carino-ChrisSpheeris.mp3"
+</audio>
+
+<audio id="grandCanyon" preload="none">
+	<source src="sounds/wind-1.mp3"
+</audio>
+
+
+<!-- --------------------------------------------------- -->
+
+
+<!-- Javascript starts here: -->
+
+<script>
+
+var elapse_seconds = 0;
+var timer_enable = 0;
+var timerID;
+var tuneID = 'heineken';
+var PlayEndFlag = 0;
+var alternate_silence = 0;
+//=========================================================
+function StartUp()
+{
+
+	var now = new Date();
+
+	clearInterval(timerID);		// ***** to prevent repeat firing upon re-entry
+	timerID = setInterval("OneSecondUpdate()",1000);
+
+	tuneID ='heineken';
+	document.getElementById(tuneID).play();
+
+		PlayEndFlag = 0;
+		timer_enable = 0;
+		elapse_seconds = 0;
+		window.document.theForm.txt_tuneID.value = 'Silence is Golden.   Touch image to play.';
+
+} // end function StartUp()
+
+//=========================================================
+
+
+
+function OneSecondUpdate()
+{
+
+var now = new Date();
+var displayStr;
+
+var weekday = new Array(7);
+
+weekday[0] = "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
+var dow = weekday[now.getDay()];
+
+var month = now.getMonth() + 1
+var day = now.getDate()
+var year = now.getFullYear()
+
+	var hours = now.getHours();
+
+	var hours_ampm;
+	hours_ampm = hours;
+	if (hours>12) {hours_ampm = hours - 12;}
+	if (hours==0) {hours_ampm = 12;}
+
+	var minutes = now.getMinutes();
+	var seconds = now.getSeconds();
+
+var StrMin = String(minutes);
+if (minutes < 10){StrMin = "0" + StrMin;}
+
+var StrSec = String(seconds);
+if (seconds < 10){StrSec = "0" + StrSec;}
+
+var StrHour = String(hours_ampm);
+
+if (hours <= 11) {var StrAmPm = "AM";}
+if (hours > 11) {var StrAmPm = "PM";}
+if (hours == 0) {var StrAmPm = "AM";}
+
+
+var displayStr_date =dow + ", "+String(month) + "/" + String(day) + "/" + String(year);
+var displayStr_time =  StrHour + ":" + StrMin + ":" + StrSec + " " + StrAmPm;
+
+
+	// Display Date & Time:
+	window.document.theForm.txtDate.value = displayStr_date;
+	window.document.theForm.txtTime.value = displayStr_time;
+
+//----------------------------------------------------------------
+
+		switch (minutes)
+		{
+		case 0:
+		case 15:
+		case 30:
+		case 45:
+				if (seconds == 0) 	// right on the second
+				{
+				// place holder
+				} // end if (seconds == 0)
+
+		break;
+
+		default:
+			break;
+
+		} // end switch (minutes)
+
+//----------------------------------------------------------------
+
+	if(timer_enable==1) {elapse_seconds++;}
+
+	var s = elapse_seconds % 60;           // %: Modulus operator provides the remainder of seconds / 60
+	var m = parseInt(elapse_seconds/60) % 60;
+	var h = parseInt(elapse_seconds/3600);
+
+	var StrS = String(s);
+	var StrM = String(m);
+
+	if (s < 10){StrS = "0" + StrS;}
+	if (m < 10){StrM = "0" + StrM;}
+
+	window.document.theForm.txtElapse.value = StrM+ ":"+ StrS;
+//----------------------------------------------------------------
+
+
+	if(PlayEndFlag==1)
+		{
+		stopMusic();
+		}
+
+//=======================================================================
+} //end of function OneSecondUpdate()
+//==============================================================
+
+
+function stopMusic()
+{
+
+	document.getElementById(tuneID).pause();   // close out previous play
+	tuneID ='cuckoo';
+	document.getElementById(tuneID).play();
+
+		PlayEndFlag = 0;
+		timer_enable = 0;
+		elapse_seconds = 0;
+		window.document.theForm.txt_tuneID.value = 'Silence is Golden.   Touch image to play.';
+
+	alternate_silence = alternate_silence ^ 1;   // ^ : exclusive or with 1 will toggle that variable
+	if(alternate_silence == 0){	document.image_Main.src="images/summer_white_beach_1280x720.jpg";	}
+	if(alternate_silence == 1){	document.image_Main.src="images/grand-canyon-sunset-0127pm-1024x576.jpg";	}
+
+
+}
+//=================================================
+
+function playMusic1()
+{
+	timer_enable =1;
+	document.image_Main.src="images/coffee_cup_1_1280x720.jpg";
+
+	// *** Close out previous play:
+	document.getElementById(tuneID).pause();
+
+	tuneID ='music01';
+	document.getElementById(tuneID).currentTime=0;
+	document.getElementById(tuneID).play();
+
+	window.document.theForm.txt_tuneID.value = 'August Moon (4:12)';
+
+	var aud = document.getElementById(tuneID);
+	aud.onended = function() { PlayEndFlag = 1;	};
+}
+//=================================================
+
+//*** step 3: add function playTea()
+function playTea()
+{
+	timer_enable =1;
+	document.image_Main.src="images/tea_classic_1280x720.jpg";
+
+	// *** Close out previous play:
+	document.getElementById(tuneID).pause();
+
+	tuneID ='musicTea';
+	document.getElementById(tuneID).currentTime=0;
+	document.getElementById(tuneID).play();
+
+	window.document.theForm.txt_tuneID.value = 'Carino (4:15)';
+
+	var aud = document.getElementById(tuneID);
+	aud.onended = function() { PlayEndFlag = 1;	};
+
+}
+
+function playGrandcanyon()
+{
+	timer_enable =1;
+	document.image_Main.src="images/grand-canyon-sunset-0127pm-1024x576.jpg";
+
+	// *** Close out previous play:
+	document.getElementById(tuneID).pause();
+
+	tuneID ='grandCanyon';
+	document.getElementById(tuneID).currentTime=0;
+	document.getElementById(tuneID).play();
+
+	window.document.theForm.txt_tuneID.value = 'Wind Sound';
+
+	var aud = document.getElementById(tuneID);
+	aud.onended = function() { PlayEndFlag = 1;	};
+
+}
+
+
+
+
+
+//=================================================
+
+function play_bonus_viva()
+{
+	stopMusic();
+	window.open("bonus-viva.html" );
+}	// end function
+
+//=========================================================
+
+
+// =========== start Up ===========================
+
+	StartUp()
+
+// ================================================
+
+
+		</script>
+
+	</BODY>
+
+</HTML>
